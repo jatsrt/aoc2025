@@ -32,7 +32,10 @@ defmodule Aoc2025.MixProject do
       {:benchee, "~> 1.0", only: :dev, optional: true},
 
       # Documentation generation
-      {:ex_doc, "~> 0.31", only: :dev, runtime: false, optional: true}
+      {:ex_doc, "~> 0.31", only: :dev, runtime: false, optional: true},
+
+      # Static type analysis
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
     ]
   end
 

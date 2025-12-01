@@ -131,6 +131,38 @@ Each solution should answer:
 - Include edge cases identified in analysis
 - Example tests run by default; full solution tests are tagged `:solution`
 
+### Type Safety
+
+This project uses Elixir's typespec system with Dialyzer for static type analysis.
+
+**Required for all solutions:**
+
+1. **Define custom types** for domain concepts at the top of the module:
+   ```elixir
+   @typedoc "Direction of movement"
+   @type direction :: :up | :down | :left | :right
+
+   @typedoc "A 2D coordinate"
+   @type coord :: {integer(), integer()}
+   ```
+
+2. **Add `@spec` to all public functions**:
+   ```elixir
+   @spec part1(String.t()) :: non_neg_integer()
+   @spec parse(String.t()) :: [instruction()]
+   ```
+
+3. **Use precise types** - prefer `non_neg_integer()` over `integer()` when values can't be negative, use ranges like `0..99` for bounded values.
+
+**Available types from helpers:**
+- `Aoc2025.Day.Helpers.coord()` - `{non_neg_integer(), non_neg_integer()}`
+- `Aoc2025.Day.Helpers.grid()` - `%{coord() => String.t()}`
+
+**Run Dialyzer locally:**
+```bash
+mix dialyzer
+```
+
 ## Common Patterns
 
 ### Parsing Helpers

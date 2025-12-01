@@ -26,16 +26,27 @@ defmodule Aoc2025.Day do
           |> solve_part2()
         end
       end
+
+  ## Types
+
+  - `input()` - Raw puzzle input as a string
+  - `solution_result()` - Return type for part1/part2 (typically integer or string)
   """
 
+  @typedoc "Raw puzzle input as a string"
+  @type input :: String.t()
+
+  @typedoc "Result from solving a puzzle part (typically integer or string)"
+  @type solution_result :: integer() | String.t() | term()
+
   @doc "Solve part 1 of the puzzle"
-  @callback part1(input :: String.t()) :: any()
+  @callback part1(input :: input()) :: solution_result()
 
   @doc "Solve part 2 of the puzzle"
-  @callback part2(input :: String.t()) :: any()
+  @callback part2(input :: input()) :: solution_result()
 
   @doc "Optional: Parse the raw input into a data structure"
-  @callback parse(input :: String.t()) :: any()
+  @callback parse(input :: input()) :: term()
 
   @optional_callbacks [parse: 1]
 
@@ -103,7 +114,18 @@ defmodule Aoc2025.Day.Helpers do
   Common helper functions available to all day solutions.
 
   These are automatically imported when you `use Aoc2025.Day`.
+
+  ## Types
+
+  - `coord()` - A 2D coordinate as `{x, y}` tuple
+  - `grid()` - A map from coordinates to characters
   """
+
+  @typedoc "A 2D coordinate as {x, y} tuple"
+  @type coord :: {non_neg_integer(), non_neg_integer()}
+
+  @typedoc "A map from coordinates to single-character strings"
+  @type grid :: %{coord() => String.t()}
 
   @doc """
   Split input into lines, removing empty trailing lines.
@@ -113,6 +135,7 @@ defmodule Aoc2025.Day.Helpers do
       iex> lines("1\\n2\\n3\\n")
       ["1", "2", "3"]
   """
+  @spec lines(String.t()) :: [String.t()]
   def lines(input) do
     input
     |> String.trim()
@@ -127,6 +150,7 @@ defmodule Aoc2025.Day.Helpers do
       iex> integers("1\\n2\\n3\\n")
       [1, 2, 3]
   """
+  @spec integers(String.t()) :: [integer()]
   def integers(input) do
     input
     |> lines()
@@ -141,6 +165,7 @@ defmodule Aoc2025.Day.Helpers do
       iex> paragraphs("a\\nb\\n\\nc\\nd")
       ["a\\nb", "c\\nd"]
   """
+  @spec paragraphs(String.t()) :: [String.t()]
   def paragraphs(input) do
     input
     |> String.trim()
@@ -155,6 +180,7 @@ defmodule Aoc2025.Day.Helpers do
       iex> grid("AB\\nCD")
       %{{0, 0} => "A", {1, 0} => "B", {0, 1} => "C", {1, 1} => "D"}
   """
+  @spec grid(String.t()) :: grid()
   def grid(input) do
     input
     |> lines()
@@ -176,6 +202,7 @@ defmodule Aoc2025.Day.Helpers do
       iex> extract_integers("Game 1: 3 blue, 4 red")
       [1, 3, 4]
   """
+  @spec extract_integers(String.t()) :: [integer()]
   def extract_integers(string) do
     ~r/-?\d+/
     |> Regex.scan(string)
