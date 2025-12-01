@@ -26,6 +26,17 @@ defmodule Aoc2025.Days.Day01 do
 
   use Aoc2025.Day
 
+  # Types
+  @typedoc "Direction of dial rotation"
+  @type direction :: :left | :right
+
+  @typedoc "A rotation instruction: direction and amount"
+  @type instruction :: {direction(), non_neg_integer()}
+
+  @typedoc "Position on the dial (0-99)"
+  @type position :: 0..99
+
+  # Constants
   @dial_size 100
   @start_position 50
 
@@ -33,12 +44,14 @@ defmodule Aoc2025.Days.Day01 do
   Solve Part 1: Count how many times the dial lands on 0.
   """
   @impl true
+  @spec part1(String.t()) :: non_neg_integer()
   def part1(input), do: input |> parse() |> count_zeros()
 
   @doc """
   Solve Part 2: Count all zero crossings (passing through or landing on 0).
   """
   @impl true
+  @spec part2(String.t()) :: non_neg_integer()
   def part2(input), do: input |> parse() |> count_all_zero_crossings()
 
   @doc """
@@ -54,6 +67,7 @@ defmodule Aoc2025.Days.Day01 do
   List of tuples: `[{:left, 68}, {:right, 48}, ...]`
   """
   @impl true
+  @spec parse(String.t()) :: [instruction()]
   def parse(input), do: input |> lines() |> Enum.map(&parse_instruction/1)
 
   defp parse_instruction("L" <> amount), do: {:left, String.to_integer(amount)}
@@ -64,6 +78,7 @@ defmodule Aoc2025.Days.Day01 do
   @doc """
   Simulate dial rotations and count how many times we land on 0.
   """
+  @spec count_zeros([instruction()]) :: non_neg_integer()
   def count_zeros(instructions) do
     {_final_position, zero_count} =
       instructions
@@ -87,6 +102,7 @@ defmodule Aoc2025.Days.Day01 do
   For each rotation, we calculate how many times zero is crossed by considering
   the start position, end position, and direction of travel.
   """
+  @spec count_all_zero_crossings([instruction()]) :: non_neg_integer()
   def count_all_zero_crossings(instructions) do
     {_final_position, zero_count} =
       instructions

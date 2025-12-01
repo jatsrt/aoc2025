@@ -22,10 +22,15 @@ defmodule Aoc2025.Days.DayXX do
 
   use Aoc2025.Day
 
+  # Types - define custom types for your solution
+  # @typedoc "Description of your type"
+  # @type my_type :: ...
+
   @doc """
   Solve Part 1: [brief description]
   """
   @impl true
+  @spec part1(String.t()) :: non_neg_integer()
   def part1(input) do
     input
     |> parse()
@@ -36,6 +41,7 @@ defmodule Aoc2025.Days.DayXX do
   Solve Part 2: [brief description]
   """
   @impl true
+  @spec part2(String.t()) :: non_neg_integer()
   def part2(input) do
     input
     |> parse()
@@ -53,6 +59,7 @@ defmodule Aoc2025.Days.DayXX do
 
   [Describe what the parse function returns]
   """
+  @spec parse(String.t()) :: term()
   def parse(input) do
     # TODO: Implement parsing
     input
