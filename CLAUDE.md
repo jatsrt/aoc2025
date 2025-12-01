@@ -358,9 +358,44 @@ Map.update(counts, key, 1, &(&1 + 1))
 
 - **Indexed loops** - Use `Enum.with_index/1` if indices needed
 - **Mutable state** - Use `Enum.reduce/3` or recursion with accumulators
-- **Imperative conditionals** - Prefer pattern matching and guards
 - **Deeply nested code** - Extract to named helper functions
 - **Early returns** - Structure with pattern matching instead
+
+#### Prefer Multi-Clause Functions Over Complex Conditionals
+
+**Always use multi-clause functions with pattern matching and guards instead of nested `if/else` or `cond` statements.** This is a core Elixir idiom that makes code more readable and declarative.
+
+```elixir
+# BAD: Nested if/else is hard to read and extend
+defp count_crossings(position, {:left, amount}) do
+  if position == 0 do
+    div(amount, @dial_size)
+  else
+    if amount < position do
+      0
+    else
+      1 + div(amount - position, @dial_size)
+    end
+  end
+end
+
+# GOOD: Multi-clause functions with guards
+defp count_crossings(0, {_direction, amount}) do
+  div(amount, @dial_size)
+end
+
+defp count_crossings(position, {:left, amount}) when amount < position, do: 0
+
+defp count_crossings(position, {:left, amount}) do
+  1 + div(amount - position, @dial_size)
+end
+```
+
+Benefits of multi-clause functions:
+- Each clause handles one specific case - easier to understand
+- Guards make preconditions explicit in the function signature
+- Adding new cases is straightforward - just add another clause
+- Pattern matching in the function head is more idiomatic Elixir
 
 ### Learning Highlights
 
