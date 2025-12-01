@@ -229,13 +229,37 @@ When Claude solves an AoC problem, follow this workflow:
 ### 4. Verification Phase
 
 - Run `mix format` to ensure code is formatted
+- Run `mix dialyzer` to check for type errors
 - Run `mix test.day XX --include solution`
 - Verify both parts produce correct answers
 - Commit with meaningful message
 
-**Always run `mix format` before committing any code.** CI enforces formatting checks.
+**Always run `mix format` and `mix dialyzer` before committing any code.** CI enforces both.
 
-## Commit Standards
+## Git Workflow
+
+**The `main` branch is protected.** All changes must go through pull requests.
+
+### Branching Strategy
+
+1. Create a feature branch for each change:
+   ```bash
+   git checkout -b feature/dayXX-solution
+   # or
+   git checkout -b feature/add-some-feature
+   ```
+
+2. Make commits on the feature branch
+
+3. Push and create a PR:
+   ```bash
+   git push -u origin feature/dayXX-solution
+   gh pr create --title "Day XX: Puzzle Title" --body "..."
+   ```
+
+4. Wait for CI to pass, then merge the PR
+
+### Commit Message Format
 
 When committing solutions:
 
