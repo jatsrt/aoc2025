@@ -152,7 +152,13 @@ This project uses Elixir's typespec system with Dialyzer for static type analysi
    @spec parse(String.t()) :: [instruction()]
    ```
 
-3. **Use precise types** - prefer `non_neg_integer()` over `integer()` when values can't be negative, use ranges like `0..99` for bounded values.
+3. **Add `@spec` to private functions** - Dialyzer checks private functions too. This ensures all defined types are actually used and catches type errors throughout the module:
+   ```elixir
+   @spec apply_rotation(position(), instruction()) :: position()
+   defp apply_rotation(position, {:left, amount}), do: ...
+   ```
+
+4. **Use precise types** - prefer `non_neg_integer()` over `integer()` when values can't be negative, use ranges like `0..99` for bounded values.
 
 **Available types from helpers:**
 - `Aoc2025.Day.Helpers.coord()` - `{non_neg_integer(), non_neg_integer()}`
