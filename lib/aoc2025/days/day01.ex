@@ -33,21 +33,13 @@ defmodule Aoc2025.Days.Day01 do
   Solve Part 1: Count how many times the dial lands on 0.
   """
   @impl true
-  def part1(input) do
-    input
-    |> parse()
-    |> count_zeros()
-  end
+  def part1(input), do: input |> parse() |> count_zeros()
 
   @doc """
   Solve Part 2: Count all zero crossings (passing through or landing on 0).
   """
   @impl true
-  def part2(input) do
-    input
-    |> parse()
-    |> count_all_zero_crossings()
-  end
+  def part2(input), do: input |> parse() |> count_all_zero_crossings()
 
   @doc """
   Parse the input into a list of {direction, amount} tuples.
@@ -62,11 +54,7 @@ defmodule Aoc2025.Days.Day01 do
   List of tuples: `[{:left, 68}, {:right, 48}, ...]`
   """
   @impl true
-  def parse(input) do
-    input
-    |> lines()
-    |> Enum.map(&parse_instruction/1)
-  end
+  def parse(input), do: input |> lines() |> Enum.map(&parse_instruction/1)
 
   defp parse_instruction("L" <> amount), do: {:left, String.to_integer(amount)}
   defp parse_instruction("R" <> amount), do: {:right, String.to_integer(amount)}
@@ -88,13 +76,8 @@ defmodule Aoc2025.Days.Day01 do
     zero_count
   end
 
-  defp apply_rotation(position, {:left, amount}) do
-    Integer.mod(position - amount, @dial_size)
-  end
-
-  defp apply_rotation(position, {:right, amount}) do
-    Integer.mod(position + amount, @dial_size)
-  end
+  defp apply_rotation(position, {:left, amount}), do: Integer.mod(position - amount, @dial_size)
+  defp apply_rotation(position, {:right, amount}), do: Integer.mod(position + amount, @dial_size)
 
   # --- Part 2 Implementation ---
 
@@ -125,21 +108,13 @@ defmodule Aoc2025.Days.Day01 do
   # For RIGHT rotation: we're incrementing, so we cross 0 when we go from
   # 99 to 0 (wrapping). Each full lap crosses once.
   # Starting at 0: only return to 0 after full laps
-  defp count_crossings(0, {_direction, amount}) do
-    div(amount, @dial_size)
-  end
+  defp count_crossings(0, {_direction, amount}), do: div(amount, @dial_size)
 
   # Going left from position P: hit 0 after P steps, then every 100
   defp count_crossings(position, {:left, amount}) when amount < position, do: 0
-
-  defp count_crossings(position, {:left, amount}) do
-    1 + div(amount - position, @dial_size)
-  end
+  defp count_crossings(position, {:left, amount}), do: 1 + div(amount - position, @dial_size)
 
   # Going right from position P: hit 0 after (100-P) steps, then every 100
   defp count_crossings(position, {:right, amount}) when amount < @dial_size - position, do: 0
-
-  defp count_crossings(position, {:right, amount}) do
-    1 + div(amount - (@dial_size - position), @dial_size)
-  end
+  defp count_crossings(position, {:right, amount}), do: 1 + div(amount - (@dial_size - position), @dial_size)
 end

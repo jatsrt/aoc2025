@@ -243,6 +243,29 @@ def part1(input) do
 end
 ```
 
+#### Single-Line Pipes for Simple Transformations
+
+For simple pipelines (2-3 steps), prefer a single line over multiple lines:
+
+```elixir
+# GOOD: Simple pipes on one line
+def part1(input), do: input |> parse() |> count_zeros()
+
+def parse(input), do: input |> lines() |> Enum.map(&parse_line/1)
+
+# AVOID: Unnecessary vertical expansion for simple pipes
+def part1(input) do
+  input
+  |> parse()
+  |> count_zeros()
+end
+```
+
+Use multi-line format when:
+- The pipeline has 4+ steps
+- Any step has complex arguments
+- Line length would exceed ~80 characters
+
 ### Advanced Features to Showcase
 
 #### Pattern Matching Everywhere
