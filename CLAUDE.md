@@ -196,9 +196,12 @@ When Claude solves an AoC problem, follow this workflow:
 
 ### 4. Verification Phase
 
+- Run `mix format` to ensure code is formatted
 - Run `mix test.day XX --include solution`
 - Verify both parts produce correct answers
 - Commit with meaningful message
+
+**Always run `mix format` before committing any code.** CI enforces formatting checks.
 
 ## Commit Standards
 
