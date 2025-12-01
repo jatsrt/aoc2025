@@ -116,5 +116,7 @@ defmodule Aoc2025.Days.Day01 do
 
   # Going right from position P: hit 0 after (100-P) steps, then every 100
   defp count_crossings(position, {:right, amount}) when amount < @dial_size - position, do: 0
-  defp count_crossings(position, {:right, amount}), do: 1 + div(amount - (@dial_size - position), @dial_size)
+
+  defp count_crossings(position, {:right, amount}),
+    do: 1 + div(amount - (@dial_size - position), @dial_size)
 end

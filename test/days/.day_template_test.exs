@@ -2,7 +2,8 @@
 # Replace XX with the zero-padded day number (01, 02, etc.)
 
 defmodule Aoc2025.Days.DayXXTest do
-  use Aoc2025.DayCase, day: 0  # <- Change to actual day number
+  # <- Change to actual day number
+  use Aoc2025.DayCase, day: 0
 
   # Fill in expected answers after solving
   # Example answers come from the puzzle description
