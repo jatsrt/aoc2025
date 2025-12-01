@@ -348,6 +348,41 @@ def handle_instruction({"turn", direction}, position), do: ...
 for {:valid, x, y} <- entries, do: {x, y}
 ```
 
+#### Binary/String Pattern Matching
+
+Very useful for parsing AoC input formats:
+
+```elixir
+# Match prefixes directly in function heads
+def parse("forward " <> n), do: {:forward, String.to_integer(n)}
+def parse("up " <> n), do: {:up, String.to_integer(n)}
+def parse("L" <> n), do: {:left, String.to_integer(n)}
+
+# Binary syntax for character-by-character parsing
+def parse_chars(<<char, rest::binary>>, acc), do: parse_chars(rest, [char | acc])
+def parse_chars(<<>>, acc), do: Enum.reverse(acc)
+```
+
+#### Capture Operator `&`
+
+Shorthand for creating anonymous functions:
+
+```elixir
+# Function capture - pass existing function as argument
+Enum.map(list, &String.to_integer/1)
+Enum.filter(list, &String.starts_with?(&1, "A"))
+
+# Partial application with &1, &2, etc.
+Enum.map(numbers, &(&1 * 2))
+Enum.reduce(list, 0, &(&1 + &2))
+
+# Prefer capture over verbose fn syntax
+# GOOD:
+Enum.map(list, &parse_line/1)
+# AVOID:
+Enum.map(list, fn line -> parse_line(line) end)
+```
+
 #### Guards for Expressiveness
 
 ```elixir
