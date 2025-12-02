@@ -238,6 +238,7 @@ When Claude solves an AoC problem, follow this workflow:
 - Run `mix dialyzer` to check for type errors
 - Run `mix test.day XX --include solution`
 - Verify both parts produce correct answers
+- **Update README.md Progress table** with the day's stars, solution link, and writeup link
 - Commit with meaningful message
 
 **Always run `mix format` and `mix dialyzer` before committing any code.** CI enforces both.
