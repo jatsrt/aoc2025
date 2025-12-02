@@ -96,7 +96,7 @@ Templates are provided in:
 | Day | Stars | Solution | Writeup |
 |-----|-------|----------|---------|
 | [1](https://adventofcode.com/2025/day/1) | ⭐⭐ | [day01.ex](lib/aoc2025/days/day01.ex) | [day01.md](solutions/day01.md) |
-| 2 | | | |
+| [2](https://adventofcode.com/2025/day/2) | ⭐⭐ | [day02.ex](lib/aoc2025/days/day02.ex) | [day02.md](solutions/day02.md) |
 | 3 | | | |
 | 4 | | | |
 | 5 | | | |
@@ -107,19 +107,6 @@ Templates are provided in:
 | 10 | | | |
 | 11 | | | |
 | 12 | | | |
-| 13 | | | |
-| 14 | | | |
-| 15 | | | |
-| 16 | | | |
-| 17 | | | |
-| 18 | | | |
-| 19 | | | |
-| 20 | | | |
-| 21 | | | |
-| 22 | | | |
-| 23 | | | |
-| 24 | | | |
-| 25 | | | |
 
 ## License
 
