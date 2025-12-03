@@ -97,7 +97,7 @@ Templates are provided in:
 |-----|-------|----------|---------|
 | [1](https://adventofcode.com/2025/day/1) | ⭐⭐ | [day01.ex](lib/aoc2025/days/day01.ex) | [day01.md](solutions/day01.md) |
 | [2](https://adventofcode.com/2025/day/2) | ⭐⭐ | [day02.ex](lib/aoc2025/days/day02.ex) | [day02.md](solutions/day02.md) |
-| 3 | | | |
+| [3](https://adventofcode.com/2025/day/3) | ⭐⭐ | [day03.ex](lib/aoc2025/days/day03.ex) | [day03.md](solutions/day03.md) |
 | 4 | | | |
 | 5 | | | |
 | 6 | | | |
