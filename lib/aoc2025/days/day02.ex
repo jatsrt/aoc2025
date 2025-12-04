@@ -32,7 +32,12 @@ defmodule Aoc2025.Days.Day02 do
   @doc "Solve Part 1: Sum all invalid (doubled) IDs in the given ranges."
   @impl true
   @spec part1(String.t()) :: non_neg_integer()
-  def part1(input), do: input |> parse() |> Enum.flat_map(&find_invalid_ids/1) |> Enum.sum()
+  def part1(input) do
+    input
+    |> parse()
+    |> Enum.flat_map(&find_invalid_ids/1)
+    |> Enum.sum()
+  end
 
   @doc "Solve Part 2: Sum all IDs with patterns repeated at least twice."
   @impl true
