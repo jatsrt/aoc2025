@@ -71,16 +71,30 @@ defmodule Aoc2025.Days.Day03 do
   end
 
   # --- Part 1 Implementation ---
+  # Uses the general k-digit solution for consistency and simplicity.
+  # See max_joltage/1 for an optimized O(n) alternative when k=2.
 
   @spec solve_part1([bank()]) :: non_neg_integer()
-  defp solve_part1(banks), do: banks |> Enum.map(&max_joltage/1) |> Enum.sum()
+  defp solve_part1(banks), do: banks |> Enum.map(&max_joltage_k(&1, 2)) |> Enum.sum()
 
   @doc """
   Find the maximum two-digit joltage for a single bank.
 
+  This is an **optimized O(n) alternative** to `max_joltage_k(digits, 2)`.
+  While the general greedy algorithm is O(n*k), this specialized version
+  uses suffix maximums to achieve O(n) time complexity for the k=2 case.
+
+  ## Algorithm
+
   Uses suffix maximums for O(n) efficiency:
-  - suffix_max[i] = maximum digit at any position > i
-  - best pair at position i = digits[i] * 10 + suffix_max[i]
+  - `suffix_max[i]` = maximum digit at any position > i
+  - Best pair at position i = `digits[i] * 10 + suffix_max[i]`
+
+  ## When to Use
+
+  For educational purposes, the main solution uses `max_joltage_k/2` for
+  consistency. This function demonstrates how domain-specific optimizations
+  can improve performance when the problem structure allows it.
   """
   @spec max_joltage(bank()) :: non_neg_integer()
   def max_joltage(digits) do
