@@ -93,20 +93,20 @@ Templates are provided in:
 
 ## Progress
 
-| Day | Stars | Solution | Writeup |
-|-----|-------|----------|---------|
-| [1](https://adventofcode.com/2025/day/1) | ⭐⭐ | [day01.ex](lib/aoc2025/days/day01.ex) | [day01.md](solutions/day01.md) |
-| [2](https://adventofcode.com/2025/day/2) | ⭐⭐ | [day02.ex](lib/aoc2025/days/day02.ex) | [day02.md](solutions/day02.md) |
-| [3](https://adventofcode.com/2025/day/3) | ⭐⭐ | [day03.ex](lib/aoc2025/days/day03.ex) | [day03.md](solutions/day03.md) |
-| 4 | | | |
-| 5 | | | |
-| 6 | | | |
-| 7 | | | |
-| 8 | | | |
-| 9 | | | |
-| 10 | | | |
-| 11 | | | |
-| 12 | | | |
+| Day | Stars | Solution | Writeup | Cost |
+|-----|-------|----------|---------|------|
+| [1](https://adventofcode.com/2025/day/1) | ⭐⭐ | [day01.ex](lib/aoc2025/days/day01.ex) | [day01.md](solutions/day01.md) | - |
+| [2](https://adventofcode.com/2025/day/2) | ⭐⭐ | [day02.ex](lib/aoc2025/days/day02.ex) | [day02.md](solutions/day02.md) | - |
+| [3](https://adventofcode.com/2025/day/3) | ⭐⭐ | [day03.ex](lib/aoc2025/days/day03.ex) | [day03.md](solutions/day03.md) | - |
+| [4](https://adventofcode.com/2025/day/4) | ⭐⭐ | [day04.ex](lib/aoc2025/days/day04.ex) | [day04.md](solutions/day04.md) | $1.87 |
+| 5 | | | | |
+| 6 | | | | |
+| 7 | | | | |
+| 8 | | | | |
+| 9 | | | | |
+| 10 | | | | |
+| 11 | | | | |
+| 12 | | | | |
 
 ## License
 
