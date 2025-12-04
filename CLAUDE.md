@@ -238,8 +238,12 @@ When Claude solves an AoC problem, follow this workflow:
 - Run `mix dialyzer` to check for type errors
 - Run `mix test.day XX --include solution`
 - Verify both parts produce correct answers
-- **Update README.md Progress table** with the day's stars, solution link, and writeup link
+- **Update README.md Progress table** with the day's stars, solution link, writeup link, and cost
 - Commit with meaningful message
+
+### 5. Cost Tracking
+
+**IMPORTANT:** At the end of every day's solution, ask the user for the session cost. Record this in the README.md Progress table's "Cost" column. This helps track the expense of using Claude Opus 4.5 for educational AoC solutions.
 
 **Always run `mix format` and `mix dialyzer` before committing any code.** CI enforces both.
 
