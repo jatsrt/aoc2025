@@ -209,4 +209,28 @@ defmodule Aoc2025.Day.Helpers do
     |> List.flatten()
     |> Enum.map(&String.to_integer/1)
   end
+
+  @doc """
+  Extract all ranges from a string in "start-end" format.
+
+  Useful for parsing range specifications like "3-5" or "10-14".
+  Unlike `extract_integers/1`, this treats the hyphen as a delimiter,
+  not a negative sign.
+
+  ## Example
+
+      iex> extract_ranges("3-5")
+      [3..5]
+
+      iex> extract_ranges("rows 3-5, cols 10-20")
+      [3..5, 10..20]
+  """
+  @spec extract_ranges(String.t()) :: [Range.t()]
+  def extract_ranges(string) do
+    ~r/(\d+)-(\d+)/
+    |> Regex.scan(string, capture: :all_but_first)
+    |> Enum.map(fn [start, finish] ->
+      String.to_integer(start)..String.to_integer(finish)
+    end)
+  end
 end
