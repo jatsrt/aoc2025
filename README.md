@@ -100,7 +100,7 @@ Templates are provided in:
 | [3](https://adventofcode.com/2025/day/3) | ⭐⭐ | [day03.ex](lib/aoc2025/days/day03.ex) | [day03.md](solutions/day03.md) | - |
 | [4](https://adventofcode.com/2025/day/4) | ⭐⭐ | [day04.ex](lib/aoc2025/days/day04.ex) | [day04.md](solutions/day04.md) | $1.87 |
 | [5](https://adventofcode.com/2025/day/5) | ⭐⭐ | [day05.ex](lib/aoc2025/days/day05.ex) | [day05.md](solutions/day05.md) | $2.71 |
-| 6 | | | | |
+| [6](https://adventofcode.com/2025/day/6) | ⭐⭐ | [day06.ex](lib/aoc2025/days/day06.ex) | [day06.md](solutions/day06.md) | $1.52 |
 | 7 | | | | |
 | 8 | | | | |
 | 9 | | | | |
