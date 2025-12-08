@@ -90,24 +90,20 @@ defmodule Aoc2025.Days.Day06 do
     |> Enum.map(&parse_problem_group/1)
   end
 
-  @spec transpose([[String.t()]]) :: [[String.t()]]
   defp transpose([[] | _]), do: []
 
   defp transpose(rows) do
     [Enum.map(rows, &hd/1) | transpose(Enum.map(rows, &tl/1))]
   end
 
-  @spec group_by_separator([[String.t()]]) :: [[[String.t()]]]
   defp group_by_separator(columns) do
     columns
     |> Enum.chunk_by(&all_spaces?/1)
     |> Enum.reject(&all_spaces?(hd(&1)))
   end
 
-  @spec all_spaces?([String.t()]) :: boolean()
   defp all_spaces?(column), do: Enum.all?(column, &(&1 == " "))
 
-  @spec parse_problem_group([[String.t()]]) :: problem()
   defp parse_problem_group(columns) do
     # Each column group represents one problem
     # The bottom row contains the operator, rest are number digits
@@ -129,7 +125,6 @@ defmodule Aoc2025.Days.Day06 do
     {operator, numbers}
   end
 
-  @spec parse_operator([String.t()]) :: :add | :multiply
   defp parse_operator(row) do
     chars = Enum.join(row) |> String.trim()
 
@@ -139,7 +134,6 @@ defmodule Aoc2025.Days.Day06 do
     end
   end
 
-  @spec parse_number_row([String.t()]) :: non_neg_integer() | nil
   defp parse_number_row(row) do
     str = Enum.join(row) |> String.trim()
 
@@ -150,7 +144,6 @@ defmodule Aoc2025.Days.Day06 do
     end
   end
 
-  @spec solve_problem(problem()) :: non_neg_integer()
   defp solve_problem({:add, numbers}), do: Enum.sum(numbers)
   defp solve_problem({:multiply, numbers}), do: Enum.product(numbers)
 
@@ -177,7 +170,6 @@ defmodule Aoc2025.Days.Day06 do
     |> Enum.map(&parse_cephalopod_group/1)
   end
 
-  @spec parse_cephalopod_group([[String.t()]]) :: problem()
   defp parse_cephalopod_group(columns) do
     # Each column in the group is one number (reading digits top-to-bottom)
     # The last element in each column is the operator character

@@ -61,7 +61,6 @@ defmodule Aoc2025.Days.Day02 do
     input |> String.trim() |> String.split(",", trim: true) |> Enum.map(&parse_range/1)
   end
 
-  @spec parse_range(String.t()) :: id_range()
   defp parse_range(range_str) do
     [start, stop] = range_str |> String.split("-") |> Enum.map(&String.to_integer/1)
     {start, stop}
@@ -102,7 +101,6 @@ defmodule Aoc2025.Days.Day02 do
         do: invalid_id
   end
 
-  @spec solve_part2([id_range()]) :: non_neg_integer()
   defp solve_part2(ranges) do
     ranges |> Enum.flat_map(&find_invalid_ids_v2/1) |> MapSet.new() |> Enum.sum()
   end
@@ -126,22 +124,17 @@ defmodule Aoc2025.Days.Day02 do
   end
 
   # Multi-clause function replaces if/else - empty list when no valid range
-  @spec generate_ids(pos_integer(), pos_integer(), pos_integer()) :: [pos_integer()]
   defp generate_ids(min, max, _multiplier) when min > max, do: []
   defp generate_ids(min, max, multiplier), do: Enum.map(min..max, &(&1 * multiplier))
 
   # Valid base range for k digits: [10^(k-1), 10^k - 1], except k=1 is [1, 9]
-  @spec base_range(pos_integer()) :: {pos_integer(), pos_integer()}
   defp base_range(1), do: {1, 9}
   defp base_range(k), do: {Integer.pow(10, k - 1), Integer.pow(10, k) - 1}
 
   # Repunit for k-digit pattern repeated m times: (10^(k×m) - 1) / (10^k - 1)
-  @spec repunit(pos_integer(), pos_integer()) :: pos_integer()
   defp repunit(k, m), do: div(Integer.pow(10, k * m) - 1, Integer.pow(10, k) - 1)
 
-  @spec ceiling_div(pos_integer(), pos_integer()) :: pos_integer()
   defp ceiling_div(a, b), do: div(a + b - 1, b)
 
-  @spec num_digits(pos_integer()) :: pos_integer()
   defp num_digits(n), do: n |> Integer.to_string() |> String.length()
 end

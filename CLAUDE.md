@@ -152,11 +152,7 @@ This project uses Elixir's typespec system with Dialyzer for static type analysi
    @spec parse(String.t()) :: [instruction()]
    ```
 
-3. **Add `@spec` to private functions** - Dialyzer checks private functions too. This ensures all defined types are actually used and catches type errors throughout the module:
-   ```elixir
-   @spec apply_rotation(position(), instruction()) :: position()
-   defp apply_rotation(position, {:left, amount}), do: ...
-   ```
+3. **Private functions don't need `@spec`** - Following Elixir community conventions (Phoenix, Ecto, etc.), specs are only required on public APIs. Dialyzer infers types for private functions from their call sites.
 
 4. **Use precise types** - prefer `non_neg_integer()` over `integer()` when values can't be negative, use ranges like `0..99` for bounded values.
 
