@@ -88,7 +88,6 @@ defmodule Aoc2025.Days.Day08 do
     |> Enum.map(&parse_coord/1)
   end
 
-  @spec parse_coord(String.t()) :: coord3d()
   defp parse_coord(line) do
     [x, y, z] = line |> String.split(",") |> Enum.map(&String.to_integer/1)
     {x, y, z}
@@ -96,7 +95,6 @@ defmodule Aoc2025.Days.Day08 do
 
   # --- Part 1 Implementation ---
 
-  @spec solve_part1([coord3d()]) :: non_neg_integer()
   defp solve_part1(coords) do
     connect_closest_pairs(coords, 1000)
   end
@@ -140,9 +138,6 @@ defmodule Aoc2025.Days.Day08 do
     |> Enum.product()
   end
 
-  @spec calculate_all_distances(%{box_index() => coord3d()}, non_neg_integer()) :: [
-          distance_pair()
-        ]
   defp calculate_all_distances(coords_map, n) do
     for i <- 0..(n - 2),
         j <- (i + 1)..(n - 1) do
@@ -150,7 +145,6 @@ defmodule Aoc2025.Days.Day08 do
     end
   end
 
-  @spec distance_squared(coord3d(), coord3d()) :: number()
   defp distance_squared({x1, y1, z1}, {x2, y2, z2}) do
     dx = x2 - x1
     dy = y2 - y1
@@ -160,14 +154,12 @@ defmodule Aoc2025.Days.Day08 do
 
   # --- Union-Find Implementation ---
 
-  @spec initialize_uf(non_neg_integer()) :: uf_state()
   defp initialize_uf(n) do
     parent = Map.new(0..(n - 1), fn i -> {i, i} end)
     rank = Map.new(0..(n - 1), fn i -> {i, 0} end)
     {parent, rank}
   end
 
-  @spec find(uf_state(), box_index()) :: {box_index(), uf_state()}
   defp find({parent, _rank} = uf, x) do
     case parent[x] == x do
       true ->
@@ -180,28 +172,18 @@ defmodule Aoc2025.Days.Day08 do
     end
   end
 
-  @spec union(uf_state(), box_index(), box_index()) :: uf_state()
   defp union(uf, x, y) do
     {root_x, uf} = find(uf, x)
     {root_y, {parent, rank}} = find(uf, y)
     merge_roots(root_x, root_y, parent, rank)
   end
 
-  @spec merge_roots(box_index(), box_index(), parent_map(), rank_map()) :: uf_state()
   defp merge_roots(root, root, parent, rank), do: {parent, rank}
 
   defp merge_roots(root_x, root_y, parent, rank) do
     union_by_rank(root_x, root_y, rank[root_x], rank[root_y], parent, rank)
   end
 
-  @spec union_by_rank(
-          box_index(),
-          box_index(),
-          non_neg_integer(),
-          non_neg_integer(),
-          parent_map(),
-          rank_map()
-        ) :: uf_state()
   defp union_by_rank(root_x, root_y, rank_x, rank_y, parent, rank) when rank_x < rank_y do
     {Map.put(parent, root_x, root_y), rank}
   end
@@ -214,7 +196,6 @@ defmodule Aoc2025.Days.Day08 do
     {Map.put(parent, root_y, root_x), Map.put(rank, root_x, rank_x + 1)}
   end
 
-  @spec get_circuit_sizes(uf_state(), non_neg_integer()) :: [non_neg_integer()]
   defp get_circuit_sizes(uf, n) do
     # Find the root for each node and count sizes
     {roots, _final_uf} =
@@ -230,7 +211,6 @@ defmodule Aoc2025.Days.Day08 do
 
   # --- Part 2 Implementation ---
 
-  @spec solve_part2([coord3d()]) :: non_neg_integer()
   defp solve_part2(coords) do
     n = length(coords)
     coords_indexed = coords |> Enum.with_index() |> Map.new(fn {coord, i} -> {i, coord} end)
@@ -254,13 +234,6 @@ defmodule Aoc2025.Days.Day08 do
     x1 * x2
   end
 
-  @spec find_last_merge(
-          [distance_pair()],
-          uf_state(),
-          non_neg_integer(),
-          {box_index(), box_index()} | nil
-        ) ::
-          {uf_state(), {box_index(), box_index()}}
   defp find_last_merge(_pairs, uf, 0, last_merge), do: {uf, last_merge}
 
   defp find_last_merge([{_dist, i, j} | rest], uf, merges_needed, last_merge) do
@@ -273,15 +246,12 @@ defmodule Aoc2025.Days.Day08 do
     end
   end
 
-  @spec try_union(uf_state(), box_index(), box_index()) :: {:merged | :same_circuit, uf_state()}
   defp try_union(uf, x, y) do
     {root_x, uf} = find(uf, x)
     {root_y, {parent, rank}} = find(uf, y)
     try_merge_roots(root_x, root_y, parent, rank)
   end
 
-  @spec try_merge_roots(box_index(), box_index(), parent_map(), rank_map()) ::
-          {:merged | :same_circuit, uf_state()}
   defp try_merge_roots(root, root, parent, rank), do: {:same_circuit, {parent, rank}}
 
   defp try_merge_roots(root_x, root_y, parent, rank) do

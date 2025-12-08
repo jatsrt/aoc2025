@@ -90,20 +90,17 @@ defmodule Aoc2025.Days.Day05 do
 
   # --- Part 1 Implementation ---
 
-  @spec solve_part1(inventory()) :: non_neg_integer()
   defp solve_part1({ranges, ids}) do
     ids
     |> Enum.count(&fresh?(&1, ranges))
   end
 
-  @spec fresh?(ingredient_id(), [fresh_range()]) :: boolean()
   defp fresh?(id, ranges) do
     Enum.any?(ranges, fn range -> id in range end)
   end
 
   # --- Part 2 Implementation ---
 
-  @spec solve_part2(inventory()) :: non_neg_integer()
   defp solve_part2({ranges, _ids}) do
     ranges
     |> merge_ranges()
@@ -111,7 +108,6 @@ defmodule Aoc2025.Days.Day05 do
     |> Enum.sum()
   end
 
-  @spec merge_ranges([fresh_range()]) :: [fresh_range()]
   defp merge_ranges(ranges) do
     ranges
     |> Enum.sort_by(fn first.._//_ -> first end)
@@ -119,7 +115,6 @@ defmodule Aoc2025.Days.Day05 do
     |> Enum.reverse()
   end
 
-  @spec merge_into(fresh_range(), [fresh_range()]) :: [fresh_range()]
   defp merge_into(range, []), do: [range]
 
   defp merge_into(new_start..new_end//_, [current_start..current_end//_ | rest])
@@ -130,6 +125,5 @@ defmodule Aoc2025.Days.Day05 do
 
   defp merge_into(range, acc), do: [range | acc]
 
-  @spec range_size(fresh_range()) :: non_neg_integer()
   defp range_size(first..last//_), do: last - first + 1
 end

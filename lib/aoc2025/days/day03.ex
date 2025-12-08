@@ -63,7 +63,6 @@ defmodule Aoc2025.Days.Day03 do
     |> Enum.map(&parse_bank/1)
   end
 
-  @spec parse_bank(String.t()) :: bank()
   defp parse_bank(line) do
     line
     |> String.graphemes()
@@ -74,7 +73,6 @@ defmodule Aoc2025.Days.Day03 do
   # Uses the general k-digit solution for consistency and simplicity.
   # See max_joltage/1 for an optimized O(n) alternative when k=2.
 
-  @spec solve_part1([bank()]) :: non_neg_integer()
   defp solve_part1(banks), do: banks |> Enum.map(&max_joltage_k(&1, 2)) |> Enum.sum()
 
   @doc """
@@ -107,7 +105,6 @@ defmodule Aoc2025.Days.Day03 do
     |> Enum.max()
   end
 
-  @spec compute_suffix_maxes(bank()) :: [non_neg_integer()]
   defp compute_suffix_maxes(digits) do
     # Build suffix max array by scanning from the end
     # suffix_max[i] = max digit at positions > i
@@ -123,7 +120,6 @@ defmodule Aoc2025.Days.Day03 do
 
   # --- Part 2 Implementation ---
 
-  @spec solve_part2([bank()]) :: non_neg_integer()
   defp solve_part2(banks), do: banks |> Enum.map(&max_joltage_k(&1, 12)) |> Enum.sum()
 
   @doc """
@@ -146,15 +142,6 @@ defmodule Aoc2025.Days.Day03 do
     |> Integer.undigits()
   end
 
-  @spec select_k_digits(
-          tuple(),
-          non_neg_integer(),
-          pos_integer(),
-          non_neg_integer(),
-          non_neg_integer(),
-          [1..9]
-        ) ::
-          [1..9]
   defp select_k_digits(_digits, _n, k, k, _prev, acc), do: acc
 
   defp select_k_digits(digits, n, k, j, prev, acc) do
@@ -167,8 +154,6 @@ defmodule Aoc2025.Days.Day03 do
     select_k_digits(digits, n, k, j + 1, max_idx + 1, [max_digit | acc])
   end
 
-  @spec find_max_in_range(tuple(), non_neg_integer(), non_neg_integer()) ::
-          {1..9, non_neg_integer()}
   defp find_max_in_range(digits, start_idx, end_idx) do
     start_idx..end_idx
     |> Enum.map(fn i -> {elem(digits, i), i} end)

@@ -70,7 +70,6 @@ defmodule Aoc2025.Days.Day01 do
   @spec parse(String.t()) :: [instruction()]
   def parse(input), do: input |> lines() |> Enum.map(&parse_instruction/1)
 
-  @spec parse_instruction(String.t()) :: instruction()
   defp parse_instruction("L" <> amount), do: {:left, String.to_integer(amount)}
   defp parse_instruction("R" <> amount), do: {:right, String.to_integer(amount)}
 
@@ -92,7 +91,6 @@ defmodule Aoc2025.Days.Day01 do
     zero_count
   end
 
-  @spec apply_rotation(position(), instruction()) :: position()
   defp apply_rotation(position, {:left, amount}), do: Integer.mod(position - amount, @dial_size)
   defp apply_rotation(position, {:right, amount}), do: Integer.mod(position + amount, @dial_size)
 
@@ -126,7 +124,6 @@ defmodule Aoc2025.Days.Day01 do
   # For RIGHT rotation: we're incrementing, so we cross 0 when we go from
   # 99 to 0 (wrapping). Each full lap crosses once.
   # Starting at 0: only return to 0 after full laps
-  @spec count_crossings(position(), instruction()) :: non_neg_integer()
   defp count_crossings(0, {_direction, amount}), do: div(amount, @dial_size)
 
   # Going left from position P: hit 0 after P steps, then every 100

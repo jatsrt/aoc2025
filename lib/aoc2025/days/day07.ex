@@ -100,7 +100,6 @@ defmodule Aoc2025.Days.Day07 do
     }
   end
 
-  @spec find_chars(String.t(), String.t()) :: [column()]
   defp find_chars(row, char) do
     row
     |> String.graphemes()
@@ -111,7 +110,6 @@ defmodule Aoc2025.Days.Day07 do
 
   # --- Part 1 Implementation ---
 
-  @spec count_splits(manifold()) :: non_neg_integer()
   defp count_splits(%{start: start, rows: rows, width: width}) do
     initial_beams = MapSet.new([start])
 
@@ -122,8 +120,6 @@ defmodule Aoc2025.Days.Day07 do
     |> elem(1)
   end
 
-  @spec process_row(MapSet.t(column()), [column()], non_neg_integer(), non_neg_integer()) ::
-          {MapSet.t(column()), non_neg_integer()}
   defp process_row(beams, splitter_cols, width, splits) do
     # Find which splitters are hit by beams
     splitters_hit =
@@ -146,7 +142,6 @@ defmodule Aoc2025.Days.Day07 do
     {new_beams, new_splits}
   end
 
-  @spec maybe_add_beam(MapSet.t(column()), integer(), non_neg_integer()) :: MapSet.t(column())
   defp maybe_add_beam(beams, col, width) when col >= 0 and col < width do
     MapSet.put(beams, col)
   end
@@ -158,7 +153,6 @@ defmodule Aoc2025.Days.Day07 do
   # Count total timelines using many-worlds interpretation.
   # Unlike Part 1, paths don't merge - each distinct path is a separate timeline.
   # We track counts of particles per column instead of just presence.
-  @spec solve_part2(manifold()) :: non_neg_integer()
   defp solve_part2(%{start: start, rows: rows, width: width}) do
     # Map of column -> particle count (instead of MapSet)
     initial_particles = %{start => 1}
@@ -171,8 +165,6 @@ defmodule Aoc2025.Days.Day07 do
     |> Enum.sum()
   end
 
-  @spec process_row_quantum(%{column() => pos_integer()}, [column()], non_neg_integer()) ::
-          %{column() => pos_integer()}
   defp process_row_quantum(particles, splitter_cols, width) do
     splitter_set = MapSet.new(splitter_cols)
 
@@ -182,13 +174,6 @@ defmodule Aoc2025.Days.Day07 do
     end)
   end
 
-  @spec process_particle(
-          %{column() => pos_integer()},
-          column(),
-          pos_integer(),
-          MapSet.t(column()),
-          non_neg_integer()
-        ) :: %{column() => pos_integer()}
   defp process_particle(acc, col, count, splitter_set, width) do
     case MapSet.member?(splitter_set, col) do
       true -> split_particle(acc, col, count, width)
@@ -196,22 +181,16 @@ defmodule Aoc2025.Days.Day07 do
     end
   end
 
-  @spec split_particle(%{column() => pos_integer()}, column(), pos_integer(), non_neg_integer()) ::
-          %{column() => pos_integer()}
   defp split_particle(acc, col, count, width) do
     acc
     |> add_particles(col - 1, count, width)
     |> add_particles(col + 1, count, width)
   end
 
-  @spec pass_through_particle(%{column() => pos_integer()}, column(), pos_integer()) ::
-          %{column() => pos_integer()}
   defp pass_through_particle(acc, col, count) do
     Map.update(acc, col, count, &(&1 + count))
   end
 
-  @spec add_particles(%{column() => pos_integer()}, integer(), pos_integer(), non_neg_integer()) ::
-          %{column() => pos_integer()}
   defp add_particles(particles, col, count, width) when col >= 0 and col < width do
     Map.update(particles, col, count, &(&1 + count))
   end
