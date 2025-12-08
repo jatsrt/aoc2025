@@ -12,7 +12,8 @@ defmodule Aoc2025.Days.Day07 do
 
   ## Part 2
 
-  [To be determined after Part 1]
+  Apply the "many-worlds interpretation" where each split creates distinct
+  timelines. Count total timelines (particles don't merge even at same column).
 
   ## Approach
 
@@ -177,16 +178,36 @@ defmodule Aoc2025.Days.Day07 do
 
     particles
     |> Enum.reduce(%{}, fn {col, count}, acc ->
-      if MapSet.member?(splitter_set, col) do
-        # Split: add count to left and right columns
-        acc
-        |> add_particles(col - 1, count, width)
-        |> add_particles(col + 1, count, width)
-      else
-        # Pass through: keep particles at this column
-        Map.update(acc, col, count, &(&1 + count))
-      end
+      process_particle(acc, col, count, splitter_set, width)
     end)
+  end
+
+  @spec process_particle(
+          %{column() => pos_integer()},
+          column(),
+          pos_integer(),
+          MapSet.t(column()),
+          non_neg_integer()
+        ) :: %{column() => pos_integer()}
+  defp process_particle(acc, col, count, splitter_set, width) do
+    case MapSet.member?(splitter_set, col) do
+      true -> split_particle(acc, col, count, width)
+      false -> pass_through_particle(acc, col, count)
+    end
+  end
+
+  @spec split_particle(%{column() => pos_integer()}, column(), pos_integer(), non_neg_integer()) ::
+          %{column() => pos_integer()}
+  defp split_particle(acc, col, count, width) do
+    acc
+    |> add_particles(col - 1, count, width)
+    |> add_particles(col + 1, count, width)
+  end
+
+  @spec pass_through_particle(%{column() => pos_integer()}, column(), pos_integer()) ::
+          %{column() => pos_integer()}
+  defp pass_through_particle(acc, col, count) do
+    Map.update(acc, col, count, &(&1 + count))
   end
 
   @spec add_particles(%{column() => pos_integer()}, integer(), pos_integer(), non_neg_integer()) ::
