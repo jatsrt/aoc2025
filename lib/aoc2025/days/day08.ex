@@ -169,12 +169,14 @@ defmodule Aoc2025.Days.Day08 do
 
   @spec find(uf_state(), box_index()) :: {box_index(), uf_state()}
   defp find({parent, _rank} = uf, x) do
-    if parent[x] == x do
-      {x, uf}
-    else
-      {root, {new_parent, new_rank}} = find(uf, parent[x])
-      # Path compression
-      {root, {Map.put(new_parent, x, root), new_rank}}
+    case parent[x] == x do
+      true ->
+        {x, uf}
+
+      false ->
+        {root, {new_parent, new_rank}} = find(uf, parent[x])
+        # Path compression
+        {root, {Map.put(new_parent, x, root), new_rank}}
     end
   end
 
@@ -182,22 +184,34 @@ defmodule Aoc2025.Days.Day08 do
   defp union(uf, x, y) do
     {root_x, uf} = find(uf, x)
     {root_y, {parent, rank}} = find(uf, y)
+    merge_roots(root_x, root_y, parent, rank)
+  end
 
-    if root_x == root_y do
-      {parent, rank}
-    else
-      # Union by rank
-      cond do
-        rank[root_x] < rank[root_y] ->
-          {Map.put(parent, root_x, root_y), rank}
+  @spec merge_roots(box_index(), box_index(), parent_map(), rank_map()) :: uf_state()
+  defp merge_roots(root, root, parent, rank), do: {parent, rank}
 
-        rank[root_x] > rank[root_y] ->
-          {Map.put(parent, root_y, root_x), rank}
+  defp merge_roots(root_x, root_y, parent, rank) do
+    union_by_rank(root_x, root_y, rank[root_x], rank[root_y], parent, rank)
+  end
 
-        true ->
-          {Map.put(parent, root_y, root_x), Map.put(rank, root_x, rank[root_x] + 1)}
-      end
-    end
+  @spec union_by_rank(
+          box_index(),
+          box_index(),
+          non_neg_integer(),
+          non_neg_integer(),
+          parent_map(),
+          rank_map()
+        ) :: uf_state()
+  defp union_by_rank(root_x, root_y, rank_x, rank_y, parent, rank) when rank_x < rank_y do
+    {Map.put(parent, root_x, root_y), rank}
+  end
+
+  defp union_by_rank(root_x, root_y, rank_x, rank_y, parent, rank) when rank_x > rank_y do
+    {Map.put(parent, root_y, root_x), rank}
+  end
+
+  defp union_by_rank(root_x, root_y, rank_x, _rank_y, parent, rank) do
+    {Map.put(parent, root_y, root_x), Map.put(rank, root_x, rank_x + 1)}
   end
 
   @spec get_circuit_sizes(uf_state(), non_neg_integer()) :: [non_neg_integer()]
@@ -263,24 +277,14 @@ defmodule Aoc2025.Days.Day08 do
   defp try_union(uf, x, y) do
     {root_x, uf} = find(uf, x)
     {root_y, {parent, rank}} = find(uf, y)
+    try_merge_roots(root_x, root_y, parent, rank)
+  end
 
-    if root_x == root_y do
-      {:same_circuit, {parent, rank}}
-    else
-      # Union by rank
-      new_uf =
-        cond do
-          rank[root_x] < rank[root_y] ->
-            {Map.put(parent, root_x, root_y), rank}
+  @spec try_merge_roots(box_index(), box_index(), parent_map(), rank_map()) ::
+          {:merged | :same_circuit, uf_state()}
+  defp try_merge_roots(root, root, parent, rank), do: {:same_circuit, {parent, rank}}
 
-          rank[root_x] > rank[root_y] ->
-            {Map.put(parent, root_y, root_x), rank}
-
-          true ->
-            {Map.put(parent, root_y, root_x), Map.put(rank, root_x, rank[root_x] + 1)}
-        end
-
-      {:merged, new_uf}
-    end
+  defp try_merge_roots(root_x, root_y, parent, rank) do
+    {:merged, union_by_rank(root_x, root_y, rank[root_x], rank[root_y], parent, rank)}
   end
 end
