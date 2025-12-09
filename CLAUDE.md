@@ -89,11 +89,13 @@ Before writing code:
 
 ```bash
 # Run just example tests during development
-mix test.day XX
+MIX_ENV=test mix test.day XX
 
 # Only run full solution tests after examples pass
-mix test.day XX --include solution
+MIX_ENV=test mix test.day XX --include solution
 ```
+
+**IMPORTANT:** Always prefix test commands with `MIX_ENV=test` to ensure tests run in the correct environment.
 
 ### Step 4: Document Thoroughly
 
