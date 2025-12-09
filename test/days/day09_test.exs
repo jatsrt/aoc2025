@@ -45,4 +45,17 @@ defmodule Aoc2025.Days.Day09Test do
       assert result == @part2_answer
     end
   end
+
+  describe "part 2 optimized (sparse table + parallel)" do
+    test "example input" do
+      result = @day_module.part2_optimized(example_input())
+      assert result == @example_part2
+    end
+
+    @tag :solution
+    test "puzzle input" do
+      result = @day_module.part2_optimized(puzzle_input())
+      assert result == @part2_answer
+    end
+  end
 end

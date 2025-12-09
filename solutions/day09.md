@@ -152,7 +152,103 @@ end
 | Part | Example | Puzzle          | Time   |
 |------|---------|-----------------|--------|
 | 1    | 50      | 4,735,222,687   | <1ms   |
-| 2    | 24      | 1,569,262,188   | ~30s   |
+| 2    | 24      | 1,569,262,188   | ~32s   |
+| 2 (optimized) | 24 | 1,569,262,188 | ~3s |
+
+---
+
+## Advanced Optimization: Sparse Table + Parallelization
+
+The standard Part 2 solution is correct but slow (~32 seconds). We implemented an optimized version demonstrating two powerful techniques:
+
+### The Bottleneck
+
+The standard approach validates each rectangle by iterating through every row:
+```elixir
+# O(height) per rectangle - slow for tall rectangles!
+Enum.all?(y_min..y_max, fn y ->
+  row_contains_x_range?(row_ranges, y, rect_x_min, rect_x_max)
+end)
+```
+
+With ~250,000 pairs and rectangles spanning up to ~50,000 rows, this is O(n² × height).
+
+### Optimization 1: Sparse Table for O(1) Range Queries
+
+The rectangle validation question is really asking:
+- Is `max(min_x[y] for y in range) <= rect_x_min`?
+- Is `min(max_x[y] for y in range) >= rect_x_max`?
+
+These are **range-max** and **range-min** queries - a classic computer science problem with an elegant solution: **Sparse Tables**.
+
+#### How Sparse Tables Work
+
+A sparse table precomputes answers for all power-of-2 sized ranges:
+
+```
+Level 0: [a₀] [a₁] [a₂] [a₃] [a₄] [a₅] [a₆] [a₇]  (ranges of size 1)
+Level 1: [max(a₀,a₁)] [max(a₁,a₂)] ... (ranges of size 2)
+Level 2: [max(a₀..a₃)] [max(a₁..a₄)] ... (ranges of size 4)
+...
+```
+
+To query any range [l, r], find the largest k where 2^k ≤ length, then:
+```elixir
+max(table[k][l], table[k][r - 2^k + 1])
+```
+
+Since both ranges overlap and cover [l, r], this gives the correct answer in **O(1)**!
+
+```elixir
+defp build_sparse_table(arr, n, combine_fn) do
+  max_k = floor(:math.log2(n))
+  initial = %{0 => arr}
+
+  Enum.reduce(1..max_k//1, initial, fn k, table ->
+    prev = table[k - 1]
+    step = Bitwise.bsl(1, k - 1)  # 2^(k-1)
+
+    level_k =
+      for i <- 0..(n - Bitwise.bsl(1, k))//1, into: %{} do
+        {i, combine_fn.(prev[i], prev[i + step])}
+      end
+
+    Map.put(table, k, level_k)
+  end)
+end
+```
+
+### Optimization 2: Parallel Processing with Task.async_stream
+
+The pair checking is "embarrassingly parallel" - each pair is independent. We chunk the work and distribute across CPU cores:
+
+```elixir
+pairs
+|> Enum.chunk_every(chunk_size)
+|> Task.async_stream(
+  fn chunk ->
+    Enum.reduce(chunk, 0, fn {p1, p2}, acc ->
+      if rectangle_fits_sparse?(p1, p2, ...) do
+        max(acc, rectangle_area(p1, p2))
+      else
+        acc
+      end
+    end)
+  end,
+  timeout: :infinity,
+  ordered: false
+)
+|> Enum.reduce(0, fn {:ok, chunk_max}, acc -> max(acc, chunk_max) end)
+```
+
+### Performance Comparison
+
+| Approach | Validation | Complexity | Time |
+|----------|------------|------------|------|
+| Standard | O(height) | O(n² × height) | 32s |
+| Optimized | O(1) | O(n² / cores) | 3s |
+
+**Speedup: 10.7x**
 
 ---
 
@@ -164,29 +260,37 @@ end
 - **`Enum.chunk_every/4`**: Perfect for pairing consecutive elements with wrap-around
 - **`Enum.min_max/1`**: Convenient for getting both bounds in one pass
 - **Pattern matching in function heads**: Used for filtering edge types
+- **`Task.async_stream`**: Distributes work across CPU cores with back-pressure
+- **`Bitwise.bsl/2`**: Efficient power-of-2 calculations using bit shifts
 
 ### What Went Well
 
 - Part 1 was straightforward once I understood the inclusive area calculation
 - The scanline approach for Part 2 is elegant and efficient
+- The sparse table optimization demonstrates that algorithmic improvements often outweigh parallelization
 
 ### What Was Challenging
 
 - **Initial Part 2 approach was too slow**: First tried storing all valid tiles in a MapSet, which was O(area) and wouldn't complete
 - **Off-by-one in area calculation**: Initially forgot the +1 for inclusive rectangles
+- **Sparse table indexing**: Converting between y-coordinates and 0-indexed array positions required care
 
-### Potential Improvements
+### Key Takeaway
 
-- Could potentially optimize Part 2 further by:
-  - Pre-sorting red tiles by area potential and early-exit when no larger area is possible
-  - Using interval trees for row range queries
-  - Parallelizing the pair checks with `Task.async_stream`
+When optimizing, consider **both**:
+1. **Algorithmic improvements** (Sparse Table: O(height) → O(1) validation)
+2. **Parallelization** (Task.async_stream: divide work across cores)
+
+The combination gave us 10x+ speedup!
 
 ---
 
 ## Related Concepts
 
+- [Sparse Table (CP-Algorithms)](https://cp-algorithms.com/data_structures/sparse-table.html)
+- [Range Minimum Query](https://en.wikipedia.org/wiki/Range_minimum_query)
 - [Point-in-polygon algorithms](https://en.wikipedia.org/wiki/Point_in_polygon)
 - [Scanline rendering](https://en.wikipedia.org/wiki/Scanline_rendering)
 - [Rectilinear polygons](https://en.wikipedia.org/wiki/Rectilinear_polygon)
-- [Elixir Enum.chunk_every/4](https://hexdocs.pm/elixir/Enum.html#chunk_every/4)
+- [Elixir Task.async_stream](https://hexdocs.pm/elixir/Task.html#async_stream/3)
+- [Elixir Bitwise](https://hexdocs.pm/elixir/Bitwise.html)
