@@ -28,6 +28,9 @@ defmodule Aoc2025.MixProject do
 
   defp deps do
     [
+      # Numerical computing for matrix operations
+      {:nx, "~> 0.9"},
+
       # Benchmarking (optional, for performance analysis)
       {:benchee, "~> 1.0", only: :dev, optional: true},
 
