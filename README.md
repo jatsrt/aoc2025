@@ -106,7 +106,7 @@ Templates are provided in:
 | [9](https://adventofcode.com/2025/day/9) | ⭐⭐ | [day09.ex](lib/aoc2025/days/day09.ex) | [day09.md](solutions/day09.md) | $4.07 |
 | [10](https://adventofcode.com/2025/day/10) | ⭐⭐ | [day10.ex](lib/aoc2025/days/day10.ex) | [day10.md](solutions/day10.md) | $13.10 |
 | [11](https://adventofcode.com/2025/day/11) | ⭐⭐ | [day11.ex](lib/aoc2025/days/day11.ex) | [day11.md](solutions/day11.md) | $2.20 |
-| [12](https://adventofcode.com/2025/day/12) | ⭐⭐ | [day12.ex](lib/aoc2025/days/day12.ex) | [day12.md](solutions/day12.md) | TBD |
+| [12](https://adventofcode.com/2025/day/12) | ⭐⭐ | [day12.ex](lib/aoc2025/days/day12.ex) | [day12.md](solutions/day12.md) | $5.50 |
 
 **Total: 24 stars - Advent of Code 2025 Complete!**
 
